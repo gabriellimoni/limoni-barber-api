@@ -1,0 +1,172 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model person {
+  id          Int @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  email       String
+  addressId   Int
+  address     address @relation(fields: [addressId], references: [id])
+  user        user?
+  client      client?
+  barber      barber?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model user {
+  id            Int @id
+  person        person @relation(fields: [id], references: [id])
+  username      String
+  password      String
+  baberShopRole barber_shop_role[]
+  attendances   attendance[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model permission {
+  id          Int @id @default(autoincrement())
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  roles       role_permissions[]
+}
+model role {
+  id              Int @id @default(autoincrement())
+  name            String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  permissions     role_permissions[]
+  barberShopRoles barber_shop_role[]
+}
+model role_permissions {
+  roleId        Int
+  permissionId  Int
+  role          role @relation(fields: [roleId], references: [id])
+  permission    permission @relation(fields: [permissionId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@id([roleId, permissionId])
+}
+
+model barber_shop_poll {
+  id          Int @id @default(autoincrement())
+  name        String
+  barberShops barber_shop[]
+  clients     client[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+model barber_shop {
+  id              Int @id @default(autoincrement())
+  name            String
+  poll            barber_shop_poll @relation(fields: [pollId], references: [id])
+  pollId          Int
+  addressId       Int
+  address         address @relation(fields: [addressId], references: [id])
+  barberShopRoles barber_shop_role[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model barber_shop_role {
+  user          user @relation(fields: [userId], references: [id])
+  userId        Int
+  role          role @relation(fields: [roleId], references: [id])
+  roleId        Int
+  barberShop    barber_shop @relation(fields: [barberShopId], references: [id])
+  barberShopId  Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@id([userId, barberShopId])
+}
+
+model client {
+  id              Int @id
+  person          person @relation(fields: [id], references: [id])
+  pollId          Int
+  barberShopPoll  barber_shop_poll @relation(fields: [pollId], references: [id])
+  attendances     attendance[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model address {
+  id          Int @id @default(autoincrement())
+  street      String
+  city        String
+  state       String
+  zip         String
+  country     String
+  barberShop  barber_shop?
+  person      person?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model barber {
+  id          Int @id
+  person      person @relation(fields: [id], references: [id])
+  barberJobs  barber_job[]
+  attendances attendance[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+model barber_job {
+  id                    Int @id @default(autoincrement())
+  name                  String
+  estimateTimeInMinutes Int
+  defaultPriceInCents   Float
+  defaultCurrency       String
+  barber                barber @relation(fields: [barberId], references: [id])
+  barberId              Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+enum attendance_status {
+  SCHEDULED @map("SCHEDULED")
+  CANCELLED @map("CANCELLED")
+  COMPLETED @map("COMPLETED")
+}
+model attendance {
+  id                Int @id @default(autoincrement())
+  date              DateTime
+  priceInCents      Float
+  currency          String
+  status            attendance_status
+  client            client @relation(fields: [clientId], references: [id])
+  clientId          Int
+  barber            barber @relation(fields: [barberId], references: [id])
+  barberId          Int
+  user              user @relation(fields: [userId], references: [id])
+  userId            Int
+
+  attendance_logs   attendance_log[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model attendance_log {
+  id            Int @id @default(autoincrement())
+  attendance    attendance @relation(fields: [attendanceId], references: [id])
+  attendanceId  Int
+  oldValues     Json
+  newValues     Json
+  createdAt     DateTime @default(now())
+}

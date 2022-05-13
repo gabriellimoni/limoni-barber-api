@@ -3,9 +3,9 @@ import { Permission } from "./permission";
 export class Role {
   private id: string;
   private name: string;
-  private permissions: Set<Permission> = new Set();
+  private permissions: Permission[] = [];
 
-  constructor(id: string, name: string, permissions: Set<Permission>) {
+  constructor(id: string, name: string, permissions: Permission[]) {
     this.id = id;
     this.name = name;
     this.permissions = permissions;
@@ -19,20 +19,16 @@ export class Role {
     return this.name;
   }
 
-  public getPermissions(): Set<Permission> {
+  public getPermissions(): Permission[] {
     return this.permissions;
   }
 
   public addPermission(permission: Permission): void {
-    this.permissions.add(permission);
-  }
-
-  public removePermission(permission: Permission): void {
-    this.permissions.delete(permission);
+    this.permissions.push(permission);
   }
 
   public hasPermission(permissionName: string): boolean {
-    for (const p of this.permissions.values()) {
+    for (const p of this.permissions) {
       if (p.getName() === permissionName) return true;
     }
     return false;
