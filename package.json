@@ -16,7 +16,8 @@
     "typescript": "^4.6.4"
   },
   "scripts": {
-    "test": "jest --silent --detectOpenHandles"
+    "test": "jest --silent --detectOpenHandles",
+    "seed": "ts-node prisma/seed.ts"
   },
   "repository": {
     "type": "git",
