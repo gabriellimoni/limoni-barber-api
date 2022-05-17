@@ -2,8 +2,25 @@
   "compilerOptions": {
     "sourceMap": true,
     "outDir": "dist",
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"]
+    },
     "strict": true,
-    "lib": ["esnext"],
-    "esModuleInterop": true
-  }
+    "lib": ["es2017"],
+    "target": "es6",
+    "module": "commonjs",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": false,
+    "skipLibCheck": true,
+    "allowJs": true,
+    "typeRoots": [
+      "./@types",
+      "./node_modules/@types",
+      "../../node_modules/@types"
+    ]
+  },
+  "include": ["src"],
+  "exclude": [/*"jest.config.ts",*/ "node_modules"]
 }
