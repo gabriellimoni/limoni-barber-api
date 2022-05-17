@@ -8,16 +8,46 @@
   },
   "dependencies": {
     "@prisma/client": "^3.14.0",
+    "dotenv": "^16.0.1",
     "prisma": "^3.14.0"
   },
   "devDependencies": {
-    "@types/node": "^17.0.33",
+    "@types/express": "^4.17.13",
+    "@types/jest": "^27.5.1",
+    "@types/node": "^17.0.34",
+    "@types/supertest": "^2.0.12",
+    "eslint": "^8.15.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^2.7.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^28.1.0",
+    "prettier": "^2.6.2",
+    "supertest": "^6.2.3",
+    "ts-jest": "^28.0.2",
     "ts-node": "^10.7.0",
+    "ts-node-dev": "^1.1.8",
+    "tsconfig-paths": "^4.0.0",
     "typescript": "^4.6.4"
   },
   "scripts": {
-    "test": "jest --silent --detectOpenHandles",
+    "compile": "rm -rf dist && tsc --project tsconfig.prod.json",
+    "lint:fix": "prettier --write .",
+    "start": "PARSE_MODULES=true node -r dotenv/config dist/index.js --port=$PORT",
+    "dev": "RUNNING_LOCALLY=true ts-node-dev -r dotenv/config -r tsconfig-paths/register src/index.ts --port=$PORT",
+    "test": "jest --forceExit --runInBand",
+    "test:coverage": "jest --forceExit --coverage",
+    "precommit": "npm run lint-staged",
+    "postinstall": "npm run compile",
     "seed": "ts-node prisma/seed.ts"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write"
+    ]
+  },
+  "_moduleAliases": {
+    "@": "dist"
   },
   "repository": {
     "type": "git",

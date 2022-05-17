@@ -1,14 +1,14 @@
-import { BaseError } from "./baseApplication.error";
+import { BaseError } from './baseApplication.error'
 
 export const userNotFoundError: BaseError = {
-  id: "user-not-found",
+  id: 'user-not-found',
   code: 404,
-  message: "User not found",
-};
+  message: 'User not found',
+}
 export const invalidCredentialsError: BaseError = {
-  id: "invalid-credentials",
+  id: 'invalid-credentials',
   code: 403,
-  message: "Invalid credentials",
-};
+  message: 'Invalid credentials',
+}
 
-export const errors: BaseError[] = [userNotFoundError, invalidCredentialsError];
+export const errors: BaseError[] = [userNotFoundError, invalidCredentialsError]
