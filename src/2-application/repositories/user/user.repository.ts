@@ -1,5 +1,5 @@
-import { User } from "@/1-entity";
+import { User } from '@/1-entity'
 
 export interface GetUserByUsernameRepository {
-  getUserByUsername(username: string): Promise<User | null>;
+  getByUsername(username: string): Promise<User | null>
 }

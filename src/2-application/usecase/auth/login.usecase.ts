@@ -28,9 +28,7 @@ export class LoginUsecaseImpl implements LoginUsecase {
     private readonly tokenHandler: TokenHandler
   ) {}
   async execute(input: LoginInput): Promise<LoginOutput> {
-    const user = await this.getUserByUsernameRepo.getUserByUsername(
-      input.username
-    )
+    const user = await this.getUserByUsernameRepo.getByUsername(input.username)
     if (!user) {
       throw new NotFoundApplicationError(userNotFoundError, 'login')
     }
