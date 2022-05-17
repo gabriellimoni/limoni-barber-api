@@ -5,5 +5,10 @@ export const userNotFoundError: BaseError = {
   code: 404,
   message: "User not found",
 };
+export const invalidCredentialsError: BaseError = {
+  id: "invalid-credentials",
+  code: 403,
+  message: "Invalid credentials",
+};
 
-export const errors: BaseError[] = [userNotFoundError];
+export const errors: BaseError[] = [userNotFoundError, invalidCredentialsError];
